@@ -18,7 +18,9 @@
     "clean-webpack-plugin": "^0.1.19",
     "mocha": "^5.2.0",
     "mocha-typescript": "^1.1.17",
+    "nock": "^9.6.1",
     "nyc": "^13.0.1",
+    "rxjs-marbles": "^4.3.1",
     "source-map-support": "^0.5.9",
     "ts-loader": "^5.0.0",
     "tslint": "^5.11.0",
@@ -28,6 +30,7 @@
   },
   "dependencies": {
     "@akanass/rx-http-request": "^3.0.0",
+    "@types/nock": "^9.3.0",
     "rxjs": "^6.3.2"
   }
 }

@@ -1,30 +1,38 @@
 import {Robot} from './robot';
 import {Observable} from 'rxjs';
 import {MotionStatus, MotorStatus, MotorStatusType, Pose, Position, RecoveryStatus, SignalValue, Tool} from './model';
+import {RxRest} from './rest.rx';
 
 export class RestRobot implements Robot {
+
+    private readonly rx: RxRest;
+
+    constructor(uri: string) {
+        this.rx = new RxRest(uri);
+    }
+
     closeGripper(timeout?: number): Observable<void> {
-        return undefined;
+        return this.rx.put(RestRobot.addQuery('/gripper/close', { timeout: timeout }));
     }
 
     freeze(): Observable<void> {
-        return undefined;
+        return this.rx.put('/freeze');
     }
 
     getBase(): Observable<Position> {
-        return undefined;
+        return this.rx.get('/base');
     }
 
     getId(): Observable<string> {
-        return undefined;
+        return this.rx.get('/robot/id');
     }
 
     getInputSignal(port: number): Observable<SignalValue> {
-        return undefined;
+        return this.rx.get(`/signal/input/${port}`);
     }
 
     getMotionStatus(): Observable<MotionStatus> {
-        return undefined;
+        return this.rx.get('/status/motion');
     }
 
     getMotorStatus(...types: MotorStatusType[]): Observable<MotorStatus[]> {
@@ -32,7 +40,7 @@ export class RestRobot implements Robot {
     }
 
     getOutputSignal(port: number): Observable<SignalValue> {
-        return undefined;
+        return this.rx.get(`/signal/output/${port}`);
     }
 
     getPose(): Observable<Pose> {
@@ -48,7 +56,7 @@ export class RestRobot implements Robot {
     }
 
     openGripper(timeout?: number): Observable<void> {
-        return undefined;
+        return this.rx.put(RestRobot.addQuery('/gripper/open', { timeout: timeout }));
     }
 
     pack(): Observable<void> {
@@ -89,6 +97,26 @@ export class RestRobot implements Robot {
 
     setTool(tool: Tool): Observable<void> {
         return undefined;
+    }
+
+    private static addQuery(base: string, query?): string {
+        let result = base;
+
+        if (query) {
+            result += '?';
+
+            Object.keys(query).forEach((key) => {
+                const value = query[key];
+
+                if (value) {
+                    result += key + '=' + value.toString() + '&';
+                }
+            });
+
+            result = result.slice(0, -1);
+        }
+
+        return result;
     }
 
 }
