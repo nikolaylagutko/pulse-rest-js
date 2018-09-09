@@ -33,13 +33,18 @@ export class RxRest {
     }
 
     get<T>(path: string): Observable<T> {
-        return RxRest.execute<T>(() => {
-            return this.http.get(path);
-        });
+        return RxRest.execute<T>(
+            () => this.http.get(path),
+            (body) => JSON.parse(body)
+        );
     }
 
-    private static execute<T>(request: () => Observable<RxHttpRequestResponse<T>>): Observable<T> {
-        return request().pipe(map(RxRest.postProcess));
+    private static execute<T>(request: () => Observable<RxHttpRequestResponse<string>>, mapper?: (string) => T): Observable<T> {
+        const finalMapper = mapper ? mapper : (s) => s;
+        return request().pipe(
+            map(RxRest.postProcess),
+            map(finalMapper)
+        );
     }
 
     private static postProcess<T>(response: RxHttpRequestResponse<T>): T {

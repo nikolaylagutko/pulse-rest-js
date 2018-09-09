@@ -44,11 +44,11 @@ export class RestRobot implements Robot {
     }
 
     getPose(): Observable<Pose> {
-        return undefined;
+        return this.rx.get('/pose');
     }
 
     getPosition(): Observable<Position> {
-        return undefined;
+        return this.rx.get('/position');
     }
 
     getTool(): Observable<Tool> {
@@ -68,7 +68,7 @@ export class RestRobot implements Robot {
     }
 
     relax(): Observable<void> {
-        return undefined;
+        return this.rx.put('/relax');
     }
 
     runPoses(poses: Pose[], speed: number, tcpVelocity?: number): Observable<void> {
