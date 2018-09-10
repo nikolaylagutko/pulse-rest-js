@@ -1,6 +1,6 @@
 import * as _ from 'lodash';
 import * as nock from 'nock';
-import {MotionStatus, MotorStatusType, Pose, Position, SignalValue, Tool} from '../lib/model';
+import {MotionStatus, MotorStatusType, Pose, Position, RecoveryStatus, SignalValue, Tool} from '../lib/model';
 
 export const URL = 'http://robot.rozum.com';
 export const TIMEOUT = 1000;
@@ -73,6 +73,10 @@ export function proxyMotorStatus(statuses: string[]) {
             statusObject(statuses)
         ]
     );
+}
+
+export function proxyRecovery(status: RecoveryStatus) {
+    nock(URL).put('/recover').reply(200, RecoveryStatus[status]);
 }
 
 function statusIncludeLine(statuses: string[]) {

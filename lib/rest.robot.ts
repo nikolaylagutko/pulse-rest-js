@@ -68,7 +68,9 @@ export class RestRobot implements Robot {
     }
 
     public recover(): Observable<RecoveryStatus> {
-        return undefined;
+        return this.rx.put('/recover').pipe(
+            map((status) => RecoveryStatus[status])
+        );
     }
 
     public relax(): Observable<string> {

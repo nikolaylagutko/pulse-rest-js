@@ -76,6 +76,6 @@ export enum MotionStatus {
 }
 
 export enum RecoveryStatus {
-    SUCCESS = 'success',
-    FAILED = 'failed'
+    SUCCESS = 'SUCCESS',
+    FAILED = 'FAILED'
 }

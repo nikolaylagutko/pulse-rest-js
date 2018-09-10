@@ -6,7 +6,7 @@ import {suite, test, timeout} from 'mocha-typescript';
 import {of} from 'rxjs';
 import {observe} from 'rxjs-marbles/mocha';
 import {flatMap, tap} from 'rxjs/operators';
-import {MotionStatus, MotorStatusType, SignalValue} from '../lib/model';
+import {MotionStatus, MotorStatusType, RecoveryStatus, SignalValue} from '../lib/model';
 import {RestRobot} from '../lib/rest.robot';
 import {pose, position, tool} from './fixtures';
 import * as proxies from './rest.proxies';
@@ -195,5 +195,20 @@ suite('RestRobot', () => {
             );
         }));
     });
+
+    Object.keys(RecoveryStatus).forEach((status) =>
+        test(`should return ${status} on 'recover'`, observe(() => {
+            const recoveryStatus = RecoveryStatus[status];
+
+            proxies.proxyRecovery(recoveryStatus);
+
+            return of(1).pipe(
+                flatMap(() => robot.recover()),
+                tap((result) =>
+                    expect(result).to.be.equal(recoveryStatus)
+                )
+            );
+        }))
+    );
 
 });
