@@ -1,7 +1,7 @@
-import {Robot} from './robot';
 import {Observable} from 'rxjs';
 import {MotionStatus, MotorStatus, MotorStatusType, Pose, Position, RecoveryStatus, SignalValue, Tool} from './model';
 import {RxRest} from './rest.rx';
+import {Robot} from './robot';
 
 export class RestRobot implements Robot {
 
@@ -11,91 +11,91 @@ export class RestRobot implements Robot {
         this.rx = new RxRest(uri);
     }
 
-    closeGripper(timeout?: number): Observable<void> {
-        return this.rx.put(RestRobot.addQuery('/gripper/close', { timeout: timeout }));
+    public closeGripper(timeout?: number): Observable<void> {
+        return this.rx.put(RestRobot.addQuery('/gripper/close', { timeout }));
     }
 
-    freeze(): Observable<void> {
+    public freeze(): Observable<void> {
         return this.rx.put('/freeze');
     }
 
-    getBase(): Observable<Position> {
+    public getBase(): Observable<Position> {
         return this.rx.get('/base');
     }
 
-    getId(): Observable<string> {
+    public getId(): Observable<string> {
         return this.rx.get('/robot/id');
     }
 
-    getInputSignal(port: number): Observable<SignalValue> {
+    public getInputSignal(port: number): Observable<SignalValue> {
         return this.rx.get(`/signal/input/${port}`);
     }
 
-    getMotionStatus(): Observable<MotionStatus> {
+    public getMotionStatus(): Observable<MotionStatus> {
         return this.rx.get('/status/motion');
     }
 
-    getMotorStatus(...types: MotorStatusType[]): Observable<MotorStatus[]> {
+    public getMotorStatus(...types: MotorStatusType[]): Observable<MotorStatus[]> {
         return undefined;
     }
 
-    getOutputSignal(port: number): Observable<SignalValue> {
+    public getOutputSignal(port: number): Observable<SignalValue> {
         return this.rx.get(`/signal/output/${port}`);
     }
 
-    getPose(): Observable<Pose> {
+    public getPose(): Observable<Pose> {
         return this.rx.get('/pose');
     }
 
-    getPosition(): Observable<Position> {
+    public getPosition(): Observable<Position> {
         return this.rx.get('/position');
     }
 
-    getTool(): Observable<Tool> {
+    public getTool(): Observable<Tool> {
         return undefined;
     }
 
-    openGripper(timeout?: number): Observable<void> {
-        return this.rx.put(RestRobot.addQuery('/gripper/open', { timeout: timeout }));
+    public openGripper(timeout?: number): Observable<void> {
+        return this.rx.put(RestRobot.addQuery('/gripper/open', { timeout }));
     }
 
-    pack(): Observable<void> {
+    public pack(): Observable<void> {
         return undefined;
     }
 
-    recover(): Observable<RecoveryStatus> {
+    public recover(): Observable<RecoveryStatus> {
         return undefined;
     }
 
-    relax(): Observable<void> {
+    public relax(): Observable<void> {
         return this.rx.put('/relax');
     }
 
-    runPoses(poses: Pose[], speed: number, tcpVelocity?: number): Observable<void> {
+    public runPoses(poses: Pose[], speed: number, tcpVelocity?: number): Observable<void> {
         return undefined;
     }
 
-    runPositions(positions: Position[], speed: number, tcpVelocity?: number): Observable<void> {
+    public runPositions(positions: Position[], speed: number, tcpVelocity?: number): Observable<void> {
         return undefined;
     }
 
-    setBase(base: Position): Observable<void> {
+    public setBase(base: Position): Observable<void> {
         return undefined;
     }
 
-    setOutputSignal(port: number, value: SignalValue): Observable<void> {
+    public setOutputSignal(port: number, value: SignalValue): Observable<void> {
         return undefined;
     }
 
-    setPose(pose: Pose, speed: number, tcpVelocity?: number): Observable<void> {
+    public setPose(pose: Pose, speed: number, tcpVelocity?: number): Observable<void> {
         return undefined;
     }
 
-    setPosition(position: Position, speed: number, tcpVelocity?: number): Observable<void> {
+    public setPosition(position: Position, speed: number, tcpVelocity?: number): Observable<void> {
         return undefined;
     }
 
-    setTool(tool: Tool): Observable<void> {
+    public setTool(tool: Tool): Observable<void> {
         return undefined;
     }
 

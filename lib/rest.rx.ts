@@ -1,8 +1,8 @@
 import {RxHttpRequest, RxHttpRequestResponse} from '@akanass/rx-http-request';
+import {interval, Observable} from 'rxjs';
 import {flatMap, map, skipWhile, take} from 'rxjs/operators';
-import {Observable, interval} from 'rxjs';
 
-export type Await = () => Observable<boolean>
+export type Await = () => Observable<boolean>;
 
 const DEFAULT_INTERVAL = 500; // milliseconds
 
@@ -16,7 +16,7 @@ export class RxRest {
         });
     }
 
-    put(path: string, data?: any, awaitTimeout?: number, handler?: Await): Observable<void> {
+    public put(path: string, data?: any, awaitTimeout?: number, handler?: Await): Observable<void> {
         const result = RxRest.execute<void>(() => {
             const options = {
                 body: data
@@ -32,14 +32,17 @@ export class RxRest {
         }
     }
 
-    get<T>(path: string): Observable<T> {
+    public get<T>(path: string): Observable<T> {
         return RxRest.execute<T>(
             () => this.http.get(path),
             (body) => JSON.parse(body)
         );
     }
 
-    private static execute<T>(request: () => Observable<RxHttpRequestResponse<string>>, mapper?: (string) => T): Observable<T> {
+    private static execute<T>(
+            request: () => Observable<RxHttpRequestResponse<string>>,
+            mapper?: (s: string) => T
+    ): Observable<T> {
         const finalMapper = mapper ? mapper : (s) => s;
         return request().pipe(
             map(RxRest.postProcess),
@@ -53,7 +56,11 @@ export class RxRest {
 
 }
 
-function await<T>(observable: Observable<T>, handler: Await, intervalTimeout: number = DEFAULT_INTERVAL): Observable<T> {
+function await<T>(
+        observable: Observable<T>,
+        handler: Await,
+        intervalTimeout: number = DEFAULT_INTERVAL
+    ): Observable<T> {
     return observable.pipe(flatMap((result) =>
         interval(intervalTimeout).pipe(
             flatMap(() => handler()),
@@ -63,4 +70,3 @@ function await<T>(observable: Observable<T>, handler: Await, intervalTimeout: nu
         )
     ));
 }
-

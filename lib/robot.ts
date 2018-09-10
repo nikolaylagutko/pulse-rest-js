@@ -3,48 +3,48 @@ import {MotionStatus, MotorStatus, MotorStatusType, Pose, Position, RecoveryStat
 
 export interface Robot {
 
-    getPose(): Observable<Pose>
+    getPose(): Observable<Pose>;
 
-    getPosition(): Observable<Position>
+    getPosition(): Observable<Position>;
 
-    setPose(pose: Pose, speed: number, tcpVelocity?: number): Observable<void>
+    setPose(pose: Pose, speed: number, tcpVelocity?: number): Observable<void>;
 
-    setPosition(position: Position, speed: number, tcpVelocity?: number): Observable<void>
+    setPosition(position: Position, speed: number, tcpVelocity?: number): Observable<void>;
 
-    runPoses(poses: Pose[], speed: number, tcpVelocity?: number): Observable<void>
+    runPoses(poses: Pose[], speed: number, tcpVelocity?: number): Observable<void>;
 
-    runPositions(positions: Position[], speed: number, tcpVelocity?: number): Observable<void>
+    runPositions(positions: Position[], speed: number, tcpVelocity?: number): Observable<void>;
 
-    openGripper(timeout?: number): Observable<void>
+    openGripper(timeout?: number): Observable<void>;
 
-    closeGripper(timeout?: number): Observable<void>
+    closeGripper(timeout?: number): Observable<void>;
 
-    freeze(): Observable<void>
+    freeze(): Observable<void>;
 
-    relax(): Observable<void>
+    relax(): Observable<void>;
 
-    getBase(): Observable<Position>
+    getBase(): Observable<Position>;
 
-    setBase(base: Position): Observable<void>
+    setBase(base: Position): Observable<void>;
 
-    getTool(): Observable<Tool>
+    getTool(): Observable<Tool>;
 
-    setTool(tool: Tool): Observable<void>
+    setTool(tool: Tool): Observable<void>;
 
-    getMotorStatus(...types: MotorStatusType[]): Observable<MotorStatus[]>
+    getMotorStatus(...types: MotorStatusType[]): Observable<MotorStatus[]>;
 
-    setOutputSignal(port: number, value: SignalValue): Observable<void>
+    setOutputSignal(port: number, value: SignalValue): Observable<void>;
 
-    getOutputSignal(port: number): Observable<SignalValue>
+    getOutputSignal(port: number): Observable<SignalValue>;
 
-    getInputSignal(port: number): Observable<SignalValue>
+    getInputSignal(port: number): Observable<SignalValue>;
 
-    getId(): Observable<string>
+    getId(): Observable<string>;
 
-    getMotionStatus(): Observable<MotionStatus>
+    getMotionStatus(): Observable<MotionStatus>;
 
-    recover(): Observable<RecoveryStatus>
+    recover(): Observable<RecoveryStatus>;
 
-    pack(): Observable<void>
+    pack(): Observable<void>;
 
 }
