@@ -1,9 +1,9 @@
+import * as _ from 'lodash';
 import {Observable} from 'rxjs';
 import {map} from 'rxjs/operators';
 import {MotionStatus, MotorStatus, MotorStatusType, Pose, Position, RecoveryStatus, SignalValue, Tool} from './model';
 import {RxRest} from './rest.rx';
 import {Robot} from './robot';
-
 
 export class RestRobot implements Robot {
 
@@ -26,7 +26,7 @@ export class RestRobot implements Robot {
     }
 
     public getId(): Observable<string> {
-        return this.rx.getJson('/robot/id');
+        return this.rx.get('/robot/id');
     }
 
     public getInputSignal(port: number): Observable<SignalValue> {
@@ -40,7 +40,7 @@ export class RestRobot implements Robot {
     }
 
     public getMotorStatus(...types: MotorStatusType[]): Observable<MotorStatus[]> {
-        return undefined;
+        return this.rx.getJson('/status/motors' + RestRobot.joinMotorTypes(types));
     }
 
     public getOutputSignal(port: number): Observable<SignalValue> {
@@ -107,6 +107,14 @@ export class RestRobot implements Robot {
         return this.rx.get(path).pipe(
             map((result) => SignalValue[result])
         );
+    }
+
+    private static joinMotorTypes(types: MotorStatusType[]): string {
+        if (types) {
+            return '';
+        } else {
+            return '?includes=' + _.join(types, ',');
+        }
     }
 
     private static addQuery(base: string, query?): string {

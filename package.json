@@ -13,9 +13,12 @@
   "license": "ISC",
   "devDependencies": {
     "@types/chai": "^4.1.4",
+    "@types/chai-things": "0.0.33",
+    "@types/js-combinatorics": "^0.5.29",
     "@types/mocha": "^5.2.5",
     "chai": "^4.1.2",
     "clean-webpack-plugin": "^0.1.19",
+    "js-combinatorics": "^0.5.3",
     "mocha": "^5.2.0",
     "mocha-typescript": "^1.1.17",
     "nock": "^9.6.1",
@@ -31,7 +34,10 @@
   },
   "dependencies": {
     "@akanass/rx-http-request": "^3.0.0",
+    "@types/lodash": "^4.14.116",
     "@types/nock": "^9.3.0",
+    "chai-things": "^0.2.0",
+    "lodash": "^4.17.10",
     "rxjs": "^6.3.2"
   }
 }

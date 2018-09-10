@@ -1,12 +1,18 @@
-import {expect} from 'chai';
+import {expect, should, use} from 'chai';
+import * as chaiThings from 'chai-things';
+import { power } from 'js-combinatorics';
+import * as _ from 'lodash';
 import {suite, test, timeout} from 'mocha-typescript';
 import {of} from 'rxjs';
 import {observe} from 'rxjs-marbles/mocha';
 import {flatMap, tap} from 'rxjs/operators';
-import {MotionStatus, SignalValue} from '../lib/model';
+import {MotionStatus, MotorStatusType, SignalValue} from '../lib/model';
 import {RestRobot} from '../lib/rest.robot';
 import {pose, position, tool} from './fixtures';
 import * as proxies from './rest.proxies';
+
+should();
+use(chaiThings);
 
 /* tslint:disable:quotemark */
 suite('RestRobot', () => {
@@ -145,6 +151,47 @@ suite('RestRobot', () => {
             return of(1).pipe(
                 flatMap(() => robot.getInputSignal(port)),
                 tap((result) => expect(result).to.be.equal(currentSignal))
+            );
+        }));
+    });
+
+    test("should return id on 'get-id'", observe(() => {
+        const id = 'ROBOT-ID';
+
+        proxies.proxyId(id);
+
+        return of(1).pipe(
+            flatMap(() => robot.getId()),
+            tap((result) => expect(result).to.be.equal(id))
+        );
+    }));
+
+    _.uniqBy(power(Object.keys(MotorStatusType)).toArray(), (a) => a.length).forEach((array) => {
+        test("should return motor status on 'get-motor-status'", observe(() => {
+            const types: MotorStatusType[] = array.map((v) => MotorStatusType[v]);
+            const parameters = types.length > 0 ? types : Object.keys(MotorStatusType).map((v) => MotorStatusType[v]);
+
+            proxies.proxyMotorStatus(parameters);
+
+            return of(1).pipe(
+                flatMap(() => robot.getMotorStatus(...types)),
+                tap((result) =>
+                    result.should.all.have.keys(parameters)
+                )
+            );
+        }));
+
+        test("should return status for six motors on 'get-motor-status'", observe(() => {
+            const types: MotorStatusType[] = array.map((v) => MotorStatusType[v]);
+            const parameters = types.length > 0 ? types : Object.keys(MotorStatusType).map((v) => MotorStatusType[v]);
+
+            proxies.proxyMotorStatus(parameters);
+
+            return of(1).pipe(
+                flatMap(() => robot.getMotorStatus(...types)),
+                tap((result) =>
+                    expect(result).to.have.length(6)
+                )
             );
         }));
     });

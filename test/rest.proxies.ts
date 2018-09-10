@@ -1,5 +1,6 @@
+import * as _ from 'lodash';
 import * as nock from 'nock';
-import {MotionStatus, Pose, Position, SignalValue, Tool} from '../lib/model';
+import {MotionStatus, MotorStatusType, Pose, Position, SignalValue, Tool} from '../lib/model';
 
 export const URL = 'http://robot.rozum.com';
 export const TIMEOUT = 1000;
@@ -54,4 +55,38 @@ export function proxyGetOutput(port: number, signal: SignalValue) {
 
 export function proxyGetInput(port: number, signal: SignalValue) {
     nock(URL).get(`/signal/input/${port}`).reply(200, SignalValue[signal]);
+}
+
+export function proxyId(id: string) {
+    nock(URL).get('/robot/id').reply(200, id);
+}
+
+export function proxyMotorStatus(statuses: string[]) {
+    nock(URL).get('/status/motors' + statusIncludeLine(statuses)).reply(
+        200,
+        [
+            statusObject(statuses),
+            statusObject(statuses),
+            statusObject(statuses),
+            statusObject(statuses),
+            statusObject(statuses),
+            statusObject(statuses)
+        ]
+    );
+}
+
+function statusIncludeLine(statuses: string[]) {
+    if (statuses) {
+        return '';
+    } else {
+        return '?inludes' + _.join(statuses, ',');
+    }
+}
+
+function statusObject(statuses: string[]) {
+    const obj = {};
+
+    statuses.forEach((s) => obj[s] = Math.random());
+
+    return obj;
 }
