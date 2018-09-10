@@ -1,6 +1,5 @@
 import * as nock from 'nock';
-import {Pose, Position} from '../lib/model';
-
+import {MotionStatus, Pose, Position, SignalValue, Tool} from '../lib/model';
 
 export const URL = 'http://robot.rozum.com';
 export const TIMEOUT = 1000;
@@ -35,4 +34,24 @@ export function proxyGetPose(pose: Pose) {
 
 export function proxyGetPosition(position: Position) {
     nock(URL).get('/position').reply(200, position);
+}
+
+export function proxyGetBase(base: Position) {
+    nock(URL).get('/base').reply(200, base);
+}
+
+export function proxyGetToll(tool: Tool) {
+    nock(URL).get('/tool').reply(200, tool);
+}
+
+export function proxyMotionStatus(status: MotionStatus) {
+    nock(URL).get('/status/motion').reply(200, MotionStatus[status]);
+}
+
+export function proxyGetOutput(port: number, signal: SignalValue) {
+    nock(URL).get(`/signal/output/${port}`).reply(200, SignalValue[signal]);
+}
+
+export function proxyGetInput(port: number, signal: SignalValue) {
+    nock(URL).get(`/signal/input/${port}`).reply(200, SignalValue[signal]);
 }

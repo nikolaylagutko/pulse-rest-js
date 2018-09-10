@@ -16,37 +16,29 @@ export class RxRest {
         });
     }
 
-    public put(path: string, data?: any, awaitTimeout?: number, handler?: Await): Observable<void> {
-        const result = RxRest.execute<void>(() => {
+    public put(path: string, data?: any): Observable<string> {
+        return RxRest.execute(() => {
             const options = {
                 body: data
             };
 
             return this.http.put(path, options);
         });
-
-        if (handler) {
-            return await(result, handler, awaitTimeout);
-        } else {
-            return result;
-        }
     }
 
-    public get<T>(path: string): Observable<T> {
-        return RxRest.execute<T>(
-            () => this.http.get(path),
-            (body) => JSON.parse(body)
+    public getJson<T>(path: string): Observable<T> {
+        return this.get(path).pipe(
+            map((body) => JSON.parse(body))
         );
     }
 
-    private static execute<T>(
-            request: () => Observable<RxHttpRequestResponse<string>>,
-            mapper?: (s: string) => T
-    ): Observable<T> {
-        const finalMapper = mapper ? mapper : (s) => s;
+    public get(path: string): Observable<string> {
+        return RxRest.execute(() => this.http.get(path));
+    }
+
+    private static execute(request: () => Observable<RxHttpRequestResponse<string>>): Observable<string> {
         return request().pipe(
-            map(RxRest.postProcess),
-            map(finalMapper)
+            map(RxRest.postProcess)
         );
     }
 

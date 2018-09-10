@@ -62,17 +62,17 @@ export enum MotorStatusType {
 }
 
 export enum SignalValue {
-    HIGH = 'high',
-    LOW = 'low'
+    HIGH = 'HIGH',
+    LOW = 'LOW'
 }
 
 export enum MotionStatus {
-    IDLE = 'idle',
-    ZERO_GRAVITY = 'zero_gravity',
-    RUNNING = 'running',
-    MOTION_FAILED = 'motion_failed',
-    EMERGENCY = 'emergency',
-    ERROR = 'error'
+    IDLE = 'IDLE',
+    ZERO_GRAVITY = 'ZERO_GRAVITY',
+    RUNNING = 'RUNNING',
+    MOTION_FAILED = 'MOTION_FAILED',
+    EMERGENCY = 'EMERGENCY',
+    ERROR = 'ERROR'
 }
 
 export enum RecoveryStatus {

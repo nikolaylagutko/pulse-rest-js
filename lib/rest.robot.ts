@@ -1,7 +1,9 @@
 import {Observable} from 'rxjs';
+import {map} from 'rxjs/operators';
 import {MotionStatus, MotorStatus, MotorStatusType, Pose, Position, RecoveryStatus, SignalValue, Tool} from './model';
 import {RxRest} from './rest.rx';
 import {Robot} from './robot';
+
 
 export class RestRobot implements Robot {
 
@@ -11,28 +13,30 @@ export class RestRobot implements Robot {
         this.rx = new RxRest(uri);
     }
 
-    public closeGripper(timeout?: number): Observable<void> {
+    public closeGripper(timeout?: number): Observable<string> {
         return this.rx.put(RestRobot.addQuery('/gripper/close', { timeout }));
     }
 
-    public freeze(): Observable<void> {
+    public freeze(): Observable<string> {
         return this.rx.put('/freeze');
     }
 
     public getBase(): Observable<Position> {
-        return this.rx.get('/base');
+        return this.rx.getJson('/base');
     }
 
     public getId(): Observable<string> {
-        return this.rx.get('/robot/id');
+        return this.rx.getJson('/robot/id');
     }
 
     public getInputSignal(port: number): Observable<SignalValue> {
-        return this.rx.get(`/signal/input/${port}`);
+        return this.getSignal(`/signal/input/${port}`);
     }
 
     public getMotionStatus(): Observable<MotionStatus> {
-        return this.rx.get('/status/motion');
+        return this.rx.get('/status/motion').pipe(
+            map((status) => MotionStatus[status])
+        );
     }
 
     public getMotorStatus(...types: MotorStatusType[]): Observable<MotorStatus[]> {
@@ -40,22 +44,22 @@ export class RestRobot implements Robot {
     }
 
     public getOutputSignal(port: number): Observable<SignalValue> {
-        return this.rx.get(`/signal/output/${port}`);
+        return this.getSignal(`/signal/output/${port}`);
     }
 
     public getPose(): Observable<Pose> {
-        return this.rx.get('/pose');
+        return this.rx.getJson('/pose');
     }
 
     public getPosition(): Observable<Position> {
-        return this.rx.get('/position');
+        return this.rx.getJson('/position');
     }
 
     public getTool(): Observable<Tool> {
-        return undefined;
+        return this.rx.getJson('/tool');
     }
 
-    public openGripper(timeout?: number): Observable<void> {
+    public openGripper(timeout?: number): Observable<string> {
         return this.rx.put(RestRobot.addQuery('/gripper/open', { timeout }));
     }
 
@@ -67,7 +71,7 @@ export class RestRobot implements Robot {
         return undefined;
     }
 
-    public relax(): Observable<void> {
+    public relax(): Observable<string> {
         return this.rx.put('/relax');
     }
 
@@ -97,6 +101,12 @@ export class RestRobot implements Robot {
 
     public setTool(tool: Tool): Observable<void> {
         return undefined;
+    }
+
+    private getSignal(path: string): Observable<SignalValue> {
+        return this.rx.get(path).pipe(
+            map((result) => SignalValue[result])
+        );
     }
 
     private static addQuery(base: string, query?): string {

@@ -15,13 +15,13 @@ export interface Robot {
 
     runPositions(positions: Position[], speed: number, tcpVelocity?: number): Observable<void>;
 
-    openGripper(timeout?: number): Observable<void>;
+    openGripper(timeout?: number): Observable<string>;
 
-    closeGripper(timeout?: number): Observable<void>;
+    closeGripper(timeout?: number): Observable<string>;
 
-    freeze(): Observable<void>;
+    freeze(): Observable<string>;
 
-    relax(): Observable<void>;
+    relax(): Observable<string>;
 
     getBase(): Observable<Position>;
 
