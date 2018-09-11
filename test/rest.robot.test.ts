@@ -171,7 +171,7 @@ suite('RestRobot', () => {
             const types: MotorStatusType[] = array.map((v) => MotorStatusType[v]);
             const parameters = types.length > 0 ? types : Object.keys(MotorStatusType).map((v) => MotorStatusType[v]);
 
-            proxies.proxyMotorStatus(parameters);
+            proxies.proxyMotorStatus(types, parameters);
 
             return of(1).pipe(
                 flatMap(() => robot.getMotorStatus(...types)),
@@ -185,7 +185,7 @@ suite('RestRobot', () => {
             const types: MotorStatusType[] = array.map((v) => MotorStatusType[v]);
             const parameters = types.length > 0 ? types : Object.keys(MotorStatusType).map((v) => MotorStatusType[v]);
 
-            proxies.proxyMotorStatus(parameters);
+            proxies.proxyMotorStatus(types, parameters);
 
             return of(1).pipe(
                 flatMap(() => robot.getMotorStatus(...types)),

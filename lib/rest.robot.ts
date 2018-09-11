@@ -1,6 +1,6 @@
 import * as _ from 'lodash';
 import {Observable} from 'rxjs';
-import {map, withLatestFrom} from 'rxjs/operators';
+import {map} from 'rxjs/operators';
 import {MotionStatus, MotorStatus, MotorStatusType, Pose, Position, RecoveryStatus, SignalValue, Tool} from './model';
 import {RxRest} from './rest.rx';
 import {Robot} from './robot';
@@ -118,10 +118,10 @@ export class RestRobot implements Robot {
     }
 
     private static joinMotorTypes(types: MotorStatusType[]): string {
-        if (types) {
+        if (_.isEmpty(types)) {
             return '';
         } else {
-            return '?includes=' + _.join(types, ',');
+            return '?include=' + _.join(types, ',');
         }
     }
 

@@ -61,16 +61,16 @@ export function proxyId(id: string) {
     nock(URL).get('/robot/id').reply(200, id);
 }
 
-export function proxyMotorStatus(statuses: string[]) {
-    nock(URL).get('/status/motors' + statusIncludeLine(statuses)).reply(
+export function proxyMotorStatus(requested: string[], fields: string[]) {
+    nock(URL).get('/status/motors' + statusIncludeLine(requested)).reply(
         200,
         [
-            statusObject(statuses),
-            statusObject(statuses),
-            statusObject(statuses),
-            statusObject(statuses),
-            statusObject(statuses),
-            statusObject(statuses)
+            statusObject(fields),
+            statusObject(fields),
+            statusObject(fields),
+            statusObject(fields),
+            statusObject(fields),
+            statusObject(fields)
         ]
     );
 }
@@ -96,10 +96,10 @@ export function proxyRunPositions(positions: Position[], speed: number, tcpVeloc
 }
 
 function statusIncludeLine(statuses: string[]) {
-    if (statuses) {
+    if (statuses.length === 0) {
         return '';
     } else {
-        return '?includes' + _.join(statuses, ',');
+        return '?include=' + _.join(statuses, ',');
     }
 }
 
