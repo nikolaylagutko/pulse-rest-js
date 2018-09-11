@@ -211,4 +211,120 @@ suite('RestRobot', () => {
         }))
     );
 
+    test("should return 'OK' on 'set-pose'", observe(() => {
+        const nextPose = pose();
+        const speed = 70;
+
+        proxies.proxySetPose(nextPose, speed);
+
+        return of(nextPose).pipe(
+            flatMap((p) => robot.setPose(p, speed)),
+            tap((result) =>
+                expect(result).to.be.equal('OK')
+            )
+        );
+    }));
+
+    test("should return 'OK' on 'set-pose' with tcp-velocity", observe(() => {
+        const nextPose = pose();
+        const speed = 70;
+        const tcpVelocity = Math.random();
+
+        proxies.proxySetPose(nextPose, speed, tcpVelocity);
+
+        return of(nextPose).pipe(
+            flatMap((p) => robot.setPose(p, speed, tcpVelocity)),
+            tap((result) =>
+                expect(result).to.be.equal('OK')
+            )
+        );
+    }));
+
+    test("should return 'OK' on 'set-position'", observe(() => {
+        const nextPosition = position();
+        const speed = 70;
+
+        proxies.proxySetPosition(nextPosition, speed);
+
+        return of(nextPosition).pipe(
+            flatMap((p) => robot.setPosition(p, speed)),
+            tap((result) =>
+                expect(result).to.be.equal('OK')
+            )
+        );
+    }));
+
+    test("should return 'OK' on 'set-position' with tcp-velocity", observe(() => {
+        const nextPosition = position();
+        const speed = 70;
+        const tcpVelocity = Math.random();
+
+        proxies.proxySetPosition(nextPosition, speed, tcpVelocity);
+
+        return of(nextPosition).pipe(
+            flatMap((p) => robot.setPosition(p, speed, tcpVelocity)),
+            tap((result) =>
+                expect(result).to.be.equal('OK')
+            )
+        );
+    }));
+
+    test("should return 'OK' on 'run-poses'", observe(() => {
+        const poses = [pose(), pose(), pose()];
+        const speed = 70;
+
+        proxies.proxyRunPoses(poses, speed);
+
+        return of(poses).pipe(
+            flatMap((p) => robot.runPoses(p, speed)),
+            tap((result) =>
+                expect(result).to.be.equal('OK')
+            )
+        );
+    }));
+
+    test("should return 'OK' on 'run-poses' with tcp-velocity", observe(() => {
+        const poses = [pose(), pose(), pose()];
+        const speed = 70;
+        const tcpVelocity = Math.random();
+
+        proxies.proxyRunPoses(poses, speed, tcpVelocity);
+
+        return of(poses).pipe(
+            flatMap((p) => robot.runPoses(p, speed, tcpVelocity)),
+            tap((result) =>
+                expect(result).to.be.equal('OK')
+            )
+        );
+    }));
+
+    test("should return 'OK' on 'run-positions'", observe(() => {
+        const positions = [ position(), position(), position() ];
+        const speed = 70;
+
+        proxies.proxyRunPositions(positions, speed);
+
+        return of(positions).pipe(
+            flatMap((p) => robot.runPositions(p, speed)),
+            tap((result) =>
+                expect(result).to.be.equal('OK')
+            )
+        );
+    }));
+
+    test("should return 'OK' on 'run-positions' with tcp-velocity", observe(() => {
+        const positions = [ position(), position(), position() ];
+        const speed = 70;
+        const tcpVelocity = Math.random();
+
+        proxies.proxyRunPositions(positions, speed, tcpVelocity);
+
+        return of(positions).pipe(
+            flatMap((p) => robot.runPositions(p, speed, tcpVelocity)),
+            tap((result) =>
+                expect(result).to.be.equal('OK')
+            )
+        );
+    }));
+
 });

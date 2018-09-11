@@ -19,7 +19,7 @@ export class RxRest {
     public put(path: string, data?: any): Observable<string> {
         return RxRest.execute(() => {
             const options = {
-                body: data
+                json: data
             };
 
             return this.http.put(path, options);

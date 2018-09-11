@@ -1,6 +1,6 @@
 import * as _ from 'lodash';
 import {Observable} from 'rxjs';
-import {map} from 'rxjs/operators';
+import {map, withLatestFrom} from 'rxjs/operators';
 import {MotionStatus, MotorStatus, MotorStatusType, Pose, Position, RecoveryStatus, SignalValue, Tool} from './model';
 import {RxRest} from './rest.rx';
 import {Robot} from './robot';
@@ -77,12 +77,12 @@ export class RestRobot implements Robot {
         return this.rx.put('/relax');
     }
 
-    public runPoses(poses: Pose[], speed: number, tcpVelocity?: number): Observable<void> {
-        return undefined;
+    public runPoses(poses: Pose[], speed: number, tcpVelocity?: number): Observable<string> {
+        return this.rx.put(RestRobot.addSpeedAndTcp('/poses/run', speed, tcpVelocity), poses);
     }
 
-    public runPositions(positions: Position[], speed: number, tcpVelocity?: number): Observable<void> {
-        return undefined;
+    public runPositions(positions: Position[], speed: number, tcpVelocity?: number): Observable<string> {
+        return this.rx.put(RestRobot.addSpeedAndTcp('/positions/run', speed, tcpVelocity), positions);
     }
 
     public setBase(base: Position): Observable<void> {
@@ -93,12 +93,12 @@ export class RestRobot implements Robot {
         return undefined;
     }
 
-    public setPose(pose: Pose, speed: number, tcpVelocity?: number): Observable<void> {
-        return undefined;
+    public setPose(pose: Pose, speed: number, tcpVelocity?: number): Observable<string> {
+        return this.rx.put(RestRobot.addSpeedAndTcp('/pose', speed, tcpVelocity), pose);
     }
 
-    public setPosition(position: Position, speed: number, tcpVelocity?: number): Observable<void> {
-        return undefined;
+    public setPosition(position: Position, speed: number, tcpVelocity?: number): Observable<string> {
+        return this.rx.put(RestRobot.addSpeedAndTcp('/position', speed, tcpVelocity), position);
     }
 
     public setTool(tool: Tool): Observable<void> {
@@ -109,6 +109,12 @@ export class RestRobot implements Robot {
         return this.rx.get(path).pipe(
             map((result) => SignalValue[result])
         );
+    }
+
+    private static addSpeedAndTcp(base: string, speed: number, tcpVelocity?: number): string {
+        const withSpeed = `${base}?speed=${speed}`;
+
+        return tcpVelocity ? `${withSpeed}&tcpVelocity=${tcpVelocity}` : withSpeed;
     }
 
     private static joinMotorTypes(types: MotorStatusType[]): string {

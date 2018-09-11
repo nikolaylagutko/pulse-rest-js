@@ -1,6 +1,6 @@
 import * as _ from 'lodash';
 import * as nock from 'nock';
-import {MotionStatus, MotorStatusType, Pose, Position, RecoveryStatus, SignalValue, Tool} from '../lib/model';
+import {MotionStatus, Pose, Position, RecoveryStatus, SignalValue, Tool} from '../lib/model';
 
 export const URL = 'http://robot.rozum.com';
 export const TIMEOUT = 1000;
@@ -79,11 +79,27 @@ export function proxyRecovery(status: RecoveryStatus) {
     nock(URL).put('/recover').reply(200, RecoveryStatus[status]);
 }
 
+export function proxySetPose(pose: Pose, speed: number, tcpVelocity?: number) {
+    nock(URL).put(withSpeedAndVelocity('/pose', speed, tcpVelocity), pose).reply(200, 'OK');
+}
+
+export function proxySetPosition(position: Position, speed: number, tcpVelocity?: number) {
+    nock(URL).put(withSpeedAndVelocity('/position', speed, tcpVelocity), position).reply(200, 'OK');
+}
+
+export function proxyRunPoses(poses: Pose[], speed: number, tcpVelocity?: number) {
+    nock(URL).put(withSpeedAndVelocity('/poses/run', speed, tcpVelocity), poses).reply(200, 'OK');
+}
+
+export function proxyRunPositions(positions: Position[], speed: number, tcpVelocity?: number) {
+    nock(URL).put(withSpeedAndVelocity('/positions/run', speed, tcpVelocity), positions).reply(200, 'OK');
+}
+
 function statusIncludeLine(statuses: string[]) {
     if (statuses) {
         return '';
     } else {
-        return '?inludes' + _.join(statuses, ',');
+        return '?includes' + _.join(statuses, ',');
     }
 }
 
@@ -93,4 +109,10 @@ function statusObject(statuses: string[]) {
     statuses.forEach((s) => obj[s] = Math.random());
 
     return obj;
+}
+
+function withSpeedAndVelocity(base: string, speed: number, tcpVelocity?: number) {
+    const withSpeed = `${base}?speed=${speed}`;
+
+    return tcpVelocity ? `${withSpeed}&tcpVelocity=${tcpVelocity}` : withSpeed;
 }

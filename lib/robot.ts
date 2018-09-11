@@ -7,13 +7,13 @@ export interface Robot {
 
     getPosition(): Observable<Position>;
 
-    setPose(pose: Pose, speed: number, tcpVelocity?: number): Observable<void>;
+    setPose(pose: Pose, speed: number, tcpVelocity?: number): Observable<string>;
 
-    setPosition(position: Position, speed: number, tcpVelocity?: number): Observable<void>;
+    setPosition(position: Position, speed: number, tcpVelocity?: number): Observable<string>;
 
-    runPoses(poses: Pose[], speed: number, tcpVelocity?: number): Observable<void>;
+    runPoses(poses: Pose[], speed: number, tcpVelocity?: number): Observable<string>;
 
-    runPositions(positions: Position[], speed: number, tcpVelocity?: number): Observable<void>;
+    runPositions(positions: Position[], speed: number, tcpVelocity?: number): Observable<string>;
 
     openGripper(timeout?: number): Observable<string>;
 
