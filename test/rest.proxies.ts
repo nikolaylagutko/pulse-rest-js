@@ -95,6 +95,10 @@ export function proxyRunPositions(positions: Position[], speed: number, tcpVeloc
     nock(URL).put(withSpeedAndVelocity('/positions/run', speed, tcpVelocity), positions).reply(200, 'OK');
 }
 
+export function pack() {
+    nock(URL).put('/pack').reply(200, 'OK');
+}
+
 function statusIncludeLine(statuses: string[]) {
     if (statuses.length === 0) {
         return '';
